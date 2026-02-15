@@ -331,4 +331,153 @@ footer {
   <div class="ticker-text">4 ever Valentine — 4 ever Valentine — 4 ever Valentine — </div>
 </div>
 
-<div class="side-column left" id
+<div class="side-column left" id="leftColumn">
+  <div class="cassette">
+    <div class="reels">
+      <div class="reel" id="reelLeft"></div>
+      <div class="reel" id="reelRight"></div>
+    </div>
+    <div class="tape" id="tape"></div>
+  </div>
+  <div class="song-list">
+    <button onclick="playSong(0)">▶ Song 1</button>
+    <button onclick="playSong(1)">▶ Song 2</button>
+    <button onclick="playSong(2)">▶ Song 3</button>
+    <button onclick="stopSong()">⏹ Stop</button>
+  </div>
+  <audio id="audioPlayer" loop></audio>
+</div>
+
+<div class="side-column right" id="rightColumn">
+  <div class="links-menu">
+    <a href="#">MENU</a>
+    <a href="#">CONTACT</a>
+    <a href="https://www.youtube.com" target="_blank">YOUTUBE</a>
+    <a href="https://www.instagram.com" target="_blank">INSTAGRAM</a>
+  </div>
+</div>
+
+<div class="toggle-buttons toggle-left" onclick="toggleLeft()">◀</div>
+<div class="toggle-buttons toggle-right" onclick="toggleRight()">▶</div>
+
+<div class="main-menu">
+  <button onclick="showContent('video')">VIDEO</button>
+  <button onclick="showContent('about')">ABOUT</button>
+  <button onclick="showContent('creations')">CREATIONS</button>
+  <button onclick="showContent('tools')">TOOLS</button>
+</div>
+
+<div class="content-area" id="contentArea">
+  <p>Welcome! Click a menu above to explore.</p>
+</div>
+
+<footer id="footer">
+  Created on <span id="createDate"></span>
+</footer>
+
+<div id="calendar"></div>
+</div>
+
+<script>
+// ---------- TERMINAL PRELUDE ----------
+const terminalText = [
+  "INITIALIZING SYSTEM...",
+  "ACCESS GRANTED.",
+  "WELCOME TO 4 EVER VALENTINE",
+  "LOADING CINEMATIC EXPERIENCE..."
+];
+
+const prelude = document.getElementById('terminalPrelude');
+let lineIndex = 0;
+let charIndex = 0;
+
+function typeLine() {
+  if (lineIndex < terminalText.length) {
+    if (charIndex < terminalText[lineIndex].length) {
+      prelude.innerHTML += terminalText[lineIndex][charIndex];
+      charIndex++;
+      setTimeout(typeLine, 40 + Math.random()*50);
+    } else {
+      prelude.innerHTML += "\n";
+      charIndex = 0;
+      lineIndex++;
+      setTimeout(typeLine, 300);
+    }
+  }
+}
+
+typeLine();
+
+setTimeout(() => {
+  prelude.style.opacity = 0;
+  setTimeout(() => {
+    prelude.style.display = 'none';
+    document.getElementById('mainSite').style.display = 'block';
+  }, 1000);
+}, 5000);
+
+// ---------- MAIN SITE FUNCTIONS ----------
+
+// Toggle side columns
+function toggleLeft(){ document.getElementById('leftColumn').classList.toggle('show-left'); }
+function toggleRight(){ document.getElementById('rightColumn').classList.toggle('show-right'); }
+
+// Song player
+const songs = ['song1.mp3','song2.mp3','song3.mp3'];
+let currentSong = 0;
+const player = document.getElementById('audioPlayer');
+const reelLeft = document.getElementById('reelLeft');
+const reelRight = document.getElementById('reelRight');
+const tape = document.getElementById('tape');
+
+function playSong(index){
+  currentSong = index;
+  player.src = songs[index];
+  player.play();
+  reelLeft.classList.add('spin');
+  reelRight.classList.add('spin');
+  tape.classList.add('animate');
+}
+
+function stopSong(){
+  player.pause();
+  reelLeft.classList.remove('spin');
+  reelRight.classList.remove('spin');
+  tape.classList.remove('animate');
+}
+
+// Main content
+function showContent(section){
+  const area = document.getElementById('contentArea');
+  switch(section){
+    case 'video':
+      area.innerHTML = `<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>`; break;
+    case 'about':
+      area.innerHTML = `<p>Hi, I'm a content creator obsessed with unusual phenomena and oddities. From exploring abandoned buildings to experimenting with surreal digital art, I live to create experiences that bend reality and spark curiosity.</p>`; break;
+    case 'creations':
+      area.innerHTML = `<p>Here are some of my recent projects: surreal digital collages, interactive micro-games, and experimental music pieces combining natural sounds with retro synths.</p>`; break;
+    case 'tools':
+      area.innerHTML = `
+        <p><strong>Chimera:</strong> From Greek χίμαιρα, meaning a mythological hybrid. Scientifically, refers to organisms with cells from different zygotes, e.g., some hybrid animals.</p>
+        <p><strong>Christ-centered:</strong> Focusing life around the teachings of Christ, emphasizing love, compassion, and sacrifice.</p>
+        <p><strong>Love:</strong> From Old English lufu, related to affection, attachment, or care, linking human relationships and divine connection.</p>
+        <p><strong>Abandon:</strong> From Old French abandoner, meaning to surrender fully. In this context, surrendering to love and creativity without restraint.</p>
+      `; break;
+  }
+}
+
+// Footer date
+document.getElementById('createDate').textContent = new Date().toLocaleDateString();
+
+// Daily calendar
+function updateCalendar(){
+  const today = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('calendar').textContent = today.toLocaleDateString(undefined, options);
+}
+updateCalendar();
+setInterval(updateCalendar, 60*60*1000);
+</script>
+
+</body>
+</html>
